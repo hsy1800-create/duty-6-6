@@ -1,0 +1,1368 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#EBEFF4">
+<style>
+  :root{color-scheme:light dark; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
+  body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>6-6 데일리 크루</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#EBEFF4;
+  --surface:#FFFFFF;
+  --surface2:#F4F7FA;
+  --line:#D5DDE6;
+  --line2:#E7EDF3;
+  --ink:#141B23;
+  --ink2:#5B6978;
+  --ink3:#8A98A6;
+  --a:#1A5FA6;      --a-soft:#E3EEF9;  --a-line:#B9D4EC;
+  --b:#0B7355;      --b-soft:#DCF0E9;  --b-line:#A9D9C8;
+  --c:#9A5414;      --c-soft:#F7E9D8;  --c-line:#E7C79E;
+  --done:#13773A;   --done-soft:#E1F3E6; --done-line:#A9DCB9;
+  --late:#B8321C;   --late-soft:#FBE4DF; --late-line:#EFB3A6;
+  --now:#0F4C81;
+  --shadow:0 1px 2px rgba(20,27,35,.06), 0 10px 24px -14px rgba(20,27,35,.2);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1218; --surface:#171E26; --surface2:#1D252E; --line:#2B3742; --line2:#232C36;
+    --ink:#E7EDF3; --ink2:#96A5B4; --ink3:#71818F;
+    --a:#7AB8EE;   --a-soft:#15293B;  --a-line:#2A4A69;
+    --b:#45CBA3;   --b-soft:#0F2E28;  --b-line:#1F5245;
+    --c:#E3A868;   --c-soft:#312310;  --c-line:#56401F;
+    --done:#4FD07C; --done-soft:#12301D; --done-line:#215437;
+    --late:#FF806A; --late-soft:#3A1B16; --late-line:#6B3025;
+    --now:#8CC4F0;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1218; --surface:#171E26; --surface2:#1D252E; --line:#2B3742; --line2:#232C36;
+  --ink:#E7EDF3; --ink2:#96A5B4; --ink3:#71818F;
+  --a:#7AB8EE;   --a-soft:#15293B;  --a-line:#2A4A69;
+  --b:#45CBA3;   --b-soft:#0F2E28;  --b-line:#1F5245;
+  --c:#E3A868;   --c-soft:#312310;  --c-line:#56401F;
+  --done:#4FD07C; --done-soft:#12301D; --done-line:#215437;
+  --late:#FF806A; --late-soft:#3A1B16; --late-line:#6B3025;
+  --now:#8CC4F0;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font-family:'IBM Plex Sans KR','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  font-size:15px; line-height:1.5; -webkit-text-size-adjust:100%;
+}
+h1,h2,h3{margin:0; font-weight:400; text-wrap:balance}
+button{font:inherit; color:inherit; cursor:pointer; font-family:inherit}
+:focus-visible{outline:3px solid var(--now); outline-offset:2px; border-radius:6px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums}
+.dh{font-family:'Do Hyeon','IBM Plex Sans KR',sans-serif; font-weight:400}
+.spacer{flex:1 1 20px}
+
+.wrap{max-width:1360px; margin:0 auto; padding:0 16px; padding-block:12px 26px}
+
+/* ── 상단 바 ─────────────────────────── */
+.top{display:flex; align-items:center; gap:10px; flex-wrap:nowrap; margin-bottom:12px; position:relative}
+.topright{display:flex; align-items:center; gap:8px; flex:none; margin-left:auto}
+.topdate{display:flex; align-items:baseline; gap:9px; min-width:0; flex:1 1 auto; overflow:hidden}
+.topdate .d,.topdate .wd,.topdate .cl{white-space:nowrap}
+.topdate .d{font-size:clamp(19px,2.1vw,26px)}
+@media (max-width:520px){.topdate .wd{display:none} .wideonly{display:none}}
+.topdate .wd{font-size:clamp(13px,1.3vw,16px); color:var(--ink2)}
+.topdate .cl{font-size:clamp(17px,1.9vw,24px); color:var(--ink2); margin-left:4px}
+
+.chip{
+  display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+  border-radius:999px; padding:5px 13px; font-size:13px; font-weight:600;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink2);
+}
+.chip.ok{background:var(--done-soft); border-color:var(--done-line); color:var(--done)}
+.chip.late{background:var(--late-soft); border-color:var(--late-line); color:var(--late)}
+
+.menubtn{
+  border:1px solid var(--line); background:var(--surface); border-radius:10px;
+  width:42px; height:38px; font-size:19px; line-height:1; color:var(--ink3);
+  display:grid; place-items:center;
+}
+.menubtn:hover,.menubtn.on{background:var(--surface2); color:var(--ink)}
+.sheet{
+  position:absolute; right:0; top:46px; z-index:40; width:230px;
+  background:var(--surface); border:1px solid var(--line); border-radius:13px;
+  box-shadow:0 12px 32px -8px rgba(20,27,35,.28); padding:6px; display:flex; flex-direction:column; gap:1px;
+}
+.sheet .lbl{font-size:11px; font-weight:700; letter-spacing:.08em; color:var(--ink3); padding:9px 11px 4px}
+.sheet button{
+  border:0; background:none; text-align:left; border-radius:8px; padding:9px 11px;
+  font-size:14px; font-weight:500; display:flex; align-items:center; gap:9px;
+}
+.sheet button:hover{background:var(--surface2)}
+.sheet button[disabled]{opacity:.4; cursor:default}
+.sheet hr{border:0; border-top:1px solid var(--line2); margin:5px 8px}
+
+/* ── 오늘의 당번 ─────────────────────── */
+.hero{
+  display:grid; grid-template-columns:1fr 1px 1fr;
+  background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  box-shadow:var(--shadow); overflow:hidden; margin-bottom:12px;
+}
+.hero .sep{background:var(--line)}
+@media (max-width:680px){ .hero{grid-template-columns:1fr} .hero .sep{height:1px} }
+.hside{padding:13px 18px 15px; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-width:0}
+.hside.A{border-top:5px solid var(--a)}
+.hside.B{border-top:5px solid var(--b)}
+.tagsq{
+  font-family:'Do Hyeon',sans-serif; font-size:18px; width:34px; height:34px; flex:none;
+  border-radius:9px; display:grid; place-items:center; align-self:center;
+}
+.tagsq.A{background:var(--a); color:#fff}
+.tagsq.B{background:var(--b); color:#fff}
+.tagsq.C{background:var(--c); color:#fff; font-size:13px; width:auto; padding:0 10px}
+.hnum{font-size:clamp(44px,6vw,82px); line-height:.9; letter-spacing:-.03em}
+.hside.A .hnum{color:var(--a)} .hside.B .hnum{color:var(--b)}
+.hnum small{font-size:.34em; letter-spacing:0; color:var(--ink2); margin-left:.05em}
+.hname{font-size:clamp(21px,2.7vw,36px); line-height:1.1; overflow-wrap:anywhere}
+.hname.empty{font-size:15px; color:var(--ink3)}
+.hrole{flex-basis:100%; font-size:clamp(13px,1.3vw,16px); color:var(--ink2); margin-top:2px}
+.hflags{display:flex; gap:6px; margin-left:auto; align-self:center; flex-wrap:wrap}
+.hflags .chip{font-size:11.5px; padding:3px 9px}
+
+/* ── 지금 할 일 ──────────────────────── */
+.focus{
+  background:var(--surface); border:1px solid var(--line); border-radius:18px;
+  box-shadow:var(--shadow); overflow:hidden; margin-bottom:12px;
+}
+.fhead{
+  display:flex; align-items:center; gap:10px 14px; flex-wrap:wrap;
+  padding:14px 20px; background:var(--a-soft); border-bottom:1px solid var(--a-line);
+}
+.focus.notnow .fhead{background:var(--surface2); border-bottom-color:var(--line)}
+.fhead .ttl{font-size:clamp(22px,2.8vw,32px); color:var(--a)}
+.focus.notnow .fhead .ttl{color:var(--ink)}
+.fhead .tm{font-size:14px; color:var(--ink2)}
+.livedot{width:10px; height:10px; border-radius:50%; background:var(--a); flex:none}
+@keyframes pulse{0%,100%{opacity:1; transform:scale(1)}50%{opacity:.3; transform:scale(.78)}}
+.focus:not(.notnow) .livedot{animation:pulse 2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.livedot{animation:none!important}}
+.backnow{
+  border:1px solid var(--a-line); background:var(--surface); color:var(--a);
+  border-radius:9px; padding:6px 12px; font-size:13px; font-weight:600; margin-left:auto;
+}
+
+.frow{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  background:none; border:0; border-top:1px solid var(--line2); padding:14px 20px;
+  min-height:70px;
+}
+.frow:first-child{border-top:0}
+.frow:hover{background:var(--surface2)}
+.frow.done{background:var(--done-soft)}
+.frow.done:hover{background:var(--done-soft)}
+.ftext{flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:2px}
+.ftext .t{font-size:clamp(17px,1.9vw,23px); font-weight:500; overflow-wrap:anywhere}
+.ftext .n{font-size:clamp(12.5px,1.2vw,14.5px); color:var(--ink3); overflow-wrap:anywhere}
+.frow.done .ftext .t{color:var(--ink3); text-decoration:line-through; text-decoration-thickness:2px}
+.ring{
+  width:38px; height:38px; flex:none; border-radius:50%;
+  border:3px solid var(--line); background:var(--surface);
+  display:grid; place-items:center; transition:background .15s, border-color .15s;
+}
+.ring svg{width:21px; height:21px; opacity:0; stroke:#fff; stroke-width:3.4; fill:none; stroke-linecap:round; stroke-linejoin:round}
+.frow.done .ring{background:var(--done); border-color:var(--done)}
+.frow.done .ring svg{opacity:1}
+.frow.wrapi .ring{border-radius:11px}
+.frow.locked{cursor:default}
+.frow.locked:hover{background:none}
+.frow.locked.done:hover{background:var(--done-soft)}
+.frow.locked:not(.done) .ring{opacity:.35; border-style:dashed}
+.fempty{padding:28px 20px; text-align:center; color:var(--ink3); font-size:16px}
+
+/* ── 나 · 학생 화면 ──────────────────── */
+.mecard{
+  background:var(--surface); border:1px solid var(--line); border-radius:18px;
+  box-shadow:var(--shadow); padding:18px 20px; margin-bottom:12px;
+  border-top:6px solid var(--line);
+}
+.mecard.A{border-top-color:var(--a)} .mecard.B{border-top-color:var(--b)}
+.melead{display:flex; align-items:center; gap:13px; flex-wrap:wrap}
+.metitle{font-size:clamp(25px,3.4vw,42px); line-height:1.12}
+.mecard.A .metitle{color:var(--a)} .mecard.B .metitle{color:var(--b)}
+.mesub{font-size:15px; color:var(--ink2); margin-top:6px}
+.mewhen{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:4px}
+.mewhen .big{font-size:clamp(26px,3.4vw,40px)}
+.mewhen .cnt{font-size:15px; color:var(--ink2)}
+.todaypair{display:flex; gap:10px 22px; flex-wrap:wrap; margin-top:10px}
+.tp{display:flex; align-items:center; gap:9px}
+.tp .v{font-size:clamp(18px,2.1vw,25px)}
+.mebtn{
+  border:1px solid var(--line); background:var(--surface); border-radius:999px;
+  padding:6px 13px; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:7px;
+}
+.mebtn:hover{background:var(--surface2)}
+
+.picker{background:var(--surface); border:1px solid var(--line); border-radius:18px; box-shadow:var(--shadow); padding:22px 20px; margin-bottom:12px}
+.picker h2{font-size:clamp(22px,2.8vw,30px); margin-bottom:6px}
+.picker p{margin:0 0 16px; color:var(--ink2); font-size:14.5px}
+.nogrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(112px,1fr)); gap:8px}
+.nobtn{
+  border:1.5px solid var(--line); background:var(--surface2); border-radius:12px;
+  padding:13px 10px; font-size:15px; font-weight:600; text-align:center;
+  display:flex; flex-direction:column; gap:2px; align-items:center; min-height:62px; justify-content:center;
+}
+.nobtn:hover{border-color:var(--now); background:var(--surface)}
+.nobtn .n{font-family:'Do Hyeon',sans-serif; font-size:21px}
+.nobtn .nm{font-size:12.5px; color:var(--ink2); font-weight:500}
+.roombtn{
+  width:100%; border:1.5px solid var(--a-line); background:var(--a-soft); color:var(--a);
+  border-radius:13px; padding:15px 18px; font-size:16px; font-weight:600; text-align:left; margin-bottom:18px;
+}
+.roombtn small{display:block; font-weight:500; font-size:13px; color:var(--ink2); margin-top:3px}
+
+/* ── 밀린 일 ─────────────────────────── */
+.lateblk{
+  background:var(--late-soft); border:1px solid var(--late-line); border-radius:14px;
+  margin-bottom:12px; overflow:hidden;
+}
+.latehd{
+  display:flex; align-items:center; gap:10px; width:100%; background:none; border:0;
+  padding:12px 18px; font-size:16px; font-weight:600; color:var(--late); text-align:left;
+}
+.latehd .cnt{margin-left:auto; font-size:13px; font-weight:700}
+.lateblk .frow{border-top-color:var(--late-line); min-height:60px; padding:10px 18px}
+.lateblk .frow:hover{background:rgba(0,0,0,.03)}
+
+/* ── 하루 흐름 ───────────────────────── */
+.timeline{
+  display:flex; gap:8px; overflow-x:auto; padding:4px 2px 8px; margin-bottom:12px;
+  scrollbar-width:thin;
+}
+.tpill{
+  flex:0 0 auto; border:1.5px solid var(--line); background:var(--surface);
+  border-radius:13px; padding:9px 15px; min-width:104px; text-align:left;
+  display:flex; flex-direction:column; gap:3px;
+}
+.tpill .lb{font-size:13.5px; font-weight:600; white-space:nowrap}
+.tpill .st{font-size:11.5px; color:var(--ink3); display:flex; align-items:center; gap:5px}
+.tpill.sel{border-color:var(--now); box-shadow:inset 0 0 0 1.5px var(--now)}
+.tpill.cur{background:var(--a-soft); border-color:var(--a-line)}
+.tpill.cur .lb{color:var(--a)}
+.tpill.full{background:var(--done-soft); border-color:var(--done-line)}
+.tpill.full .lb,.tpill.full .st{color:var(--done)}
+.tpill.miss{border-color:var(--late-line); background:var(--late-soft)}
+.tpill.miss .lb,.tpill.miss .st{color:var(--late)}
+
+.footbar{display:flex; align-items:center; gap:10px 16px; flex-wrap:wrap; padding:2px}
+.ghost{border:1px solid var(--line); background:var(--surface); border-radius:10px; padding:8px 14px; font-size:13.5px; font-weight:600; color:var(--ink2)}
+.ghost:hover{background:var(--surface2); color:var(--ink)}
+.rail{height:8px; border-radius:99px; background:var(--line2); overflow:hidden; flex:1 1 120px; min-width:90px; max-width:260px}
+.rail>i{display:block; height:100%; background:var(--done); border-radius:99px; transition:width .35s ease}
+
+/* ── 전체 보기 ───────────────────────── */
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:15px; box-shadow:var(--shadow); overflow:hidden}
+.card.A{border-top:5px solid var(--a)}
+.card.B{border-top:5px solid var(--b)}
+.card.C{border-top:5px solid var(--c); margin-top:12px}
+.chead{display:flex; align-items:center; gap:11px; padding:12px 16px; flex-wrap:wrap}
+.chead .ttl{font-size:19px}
+.chead .cnt{margin-left:auto; font-size:13.5px; font-weight:600; color:var(--ink2)}
+.slotgrp{border-top:1px solid var(--line2); break-inside:avoid}
+.slothdr{display:flex; align-items:center; gap:8px; padding:7px 16px 3px; font-size:11.5px; font-weight:700; letter-spacing:.07em; color:var(--ink3)}
+.slothdr .tm{margin-left:auto; font-weight:500; letter-spacing:0}
+.trow{display:flex; align-items:flex-start; gap:11px; width:100%; text-align:left; background:none; border:0; border-top:1px solid transparent; padding:9px 16px}
+.trow+.trow{border-top-color:var(--line2)}
+.trow:hover{background:var(--surface2)}
+.box{width:24px; height:24px; flex:none; border-radius:7px; margin-top:1px; border:2px solid var(--line); background:var(--surface); display:grid; place-items:center}
+.box svg{width:15px; height:15px; opacity:0; stroke:#fff; stroke-width:3.2; fill:none; stroke-linecap:round; stroke-linejoin:round}
+.trow.done .box{background:var(--done); border-color:var(--done)}
+.trow.done .box svg{opacity:1}
+.trow.overdue .box{border-color:var(--late)}
+.tt{flex:1 1 auto; min-width:0; display:flex; flex-direction:column; gap:1px}
+.tt .t{font-size:15.5px; font-weight:500; overflow-wrap:anywhere}
+.trow.done .tt .t{color:var(--ink3); text-decoration:line-through}
+.tt .n{font-size:12.5px; color:var(--ink3); overflow-wrap:anywhere}
+.tmk{font-size:11px; color:var(--ink3); flex:none; margin-top:4px}
+.trow.overdue .tmk{color:var(--late); font-weight:700}
+.common .cbody{column-count:2; column-gap:0}
+@media (max-width:760px){.common .cbody{column-count:1}}
+
+.notice{background:var(--surface); border:1px solid var(--line); border-left:5px solid var(--c); border-radius:12px; padding:13px 16px; margin-bottom:12px; box-shadow:var(--shadow)}
+.notice b{font-weight:700}
+.notice p{margin:4px 0 0; color:var(--ink2); font-size:14px}
+
+/* ── 패널 ────────────────────────────── */
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); padding:16px; margin-bottom:12px}
+.panel h2{font-size:20px; margin-bottom:4px}
+.panel .hint{color:var(--ink2); font-size:13.5px; margin:0 0 14px}
+.sect{border-top:1px solid var(--line2); padding-top:14px; margin-top:16px}
+.sect>h3{font-size:16px; margin-bottom:8px}
+table{width:100%; border-collapse:collapse; font-size:13.5px}
+th,td{text-align:left; padding:7px 9px; border-bottom:1px solid var(--line2)}
+th{font-size:11.5px; letter-spacing:.06em; color:var(--ink3); font-weight:700}
+.scrollx{overflow-x:auto}
+input[type=text],input[type=date],input[type=time],input[type=number],select,textarea{
+  font:inherit; color:var(--ink); background:var(--surface2);
+  border:1px solid var(--line); border-radius:8px; padding:7px 10px; width:100%;
+}
+textarea{min-height:130px; resize:vertical; line-height:1.6}
+label{font-size:12.5px; font-weight:600; color:var(--ink2); display:block; margin-bottom:4px}
+.row{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.btn{border:1px solid var(--line); background:var(--surface2); border-radius:9px; padding:8px 14px; font-size:13.5px; font-weight:600}
+.btn:hover{background:var(--line2)}
+.btn.pri{background:var(--now); border-color:var(--now); color:#fff}
+.btn.warn{color:var(--late); border-color:var(--late)}
+.ed{display:grid; grid-template-columns:110px 1fr 1fr 34px; gap:6px; align-items:center; margin-bottom:6px}
+@media (max-width:640px){.ed{grid-template-columns:1fr 1fr}.ed>*:nth-child(2){grid-column:1/-1}}
+.del{border:1px solid var(--line); background:var(--surface2); border-radius:8px; padding:6px 0; font-size:14px; color:var(--late)}
+.pill{display:inline-block; font-size:11.5px; font-weight:700; padding:2px 7px; border-radius:99px; background:var(--surface2); border:1px solid var(--line); color:var(--ink2); margin:0 4px 4px 0}
+.muted{color:var(--ink3); font-size:13px}
+.bar{height:6px; border-radius:99px; background:var(--line2); overflow:hidden; min-width:54px}
+.bar>i{display:block; height:100%; background:var(--done)}
+.linkbtn{background:none; border:0; font-size:13px; font-weight:600; color:var(--ink2); text-decoration:underline; text-underline-offset:3px; padding:5px 4px}
+pre{background:var(--surface2); border:1px solid var(--line); border-radius:9px; padding:12px 14px; overflow-x:auto; font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:12.5px; line-height:1.6; margin:8px 0 0}
+code{font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:.92em; background:var(--surface2); border:1px solid var(--line2); border-radius:5px; padding:1px 5px}
+details summary{padding:4px 0}
+
+body.tv{font-size:17px}
+body.tv .wrap{max-width:none}
+body.tv .frow{min-height:84px}
+body.tv .ftext .t{font-size:clamp(20px,2.3vw,28px)}
+body.tv .ring{width:44px; height:44px}
+body.tv .tpill .lb{font-size:15px}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="topdate">
+      <span class="d dh" id="hDate">—</span>
+      <span class="wd" id="hWd"></span>
+      <span class="cl mono" id="hClock">--:--</span>
+    </div>
+    <div class="topright">
+    <button class="mebtn" id="bMe" hidden>교실 화면</button>
+    <span class="chip" id="hPct">0 / 0</span>
+    <button class="menubtn" id="bMenu" aria-haspopup="true" aria-expanded="false" title="선생님 메뉴">⋯</button>
+    </div>
+    <div class="sheet" id="menu" hidden>
+      <div class="lbl">선생님 메뉴</div>
+      <button data-m="absent-a">당번 A 결석 · 교체</button>
+      <button data-m="absent-b">당번 B 결석 · 교체</button>
+      <button data-m="undo">결석 되돌리기</button>
+      <hr>
+      <button data-m="log">당번 기록 보기</button>
+      <button data-m="set">설정</button>
+      <hr>
+      <button data-m="tv">큰 글씨 켜기 / 끄기</button>
+      <button data-m="full">전체화면</button>
+    </div>
+  </header>
+
+  <div id="banner"></div>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ────────────────────────────────────────────
+   6-6 데일리 크루 — 교실 당번 화면
+   ──────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════════════
+   파이어베이스 설정
+   깃허브에 올린 주소에서 여러 기기가 기록을 함께 보려면,
+   파이어베이스 콘솔에서 받은 값을 아래 따옴표 안에 붙여넣으세요.
+   비워 두면 기록이 이 브라우저 안에만 남습니다.
+   ══════════════════════════════════════════════════════════════ */
+const FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
+};
+const CLASS_ID = "6-6";
+/* ═════════════════ 여기까지만 고치시면 됩니다 ═════════════════ */
+
+const TAB = 'tab-' + Math.random().toString(36).slice(2, 10);
+const WD = ['일', '월', '화', '수', '목', '금', '토'];
+
+let FB = FIREBASE_CONFIG;
+try { const o = JSON.parse(localStorage.getItem('duty66:fbcfg') || 'null'); if (o && o.projectId) FB = o; } catch (e) {}
+
+const FB_VER = '10.12.2';
+const FB_HOSTS = ['https://www.gstatic.com/firebasejs/' + FB_VER + '/', 'https://cdnjs.cloudflare.com/ajax/libs/firebase/' + FB_VER + '/'];
+let fstore = null, fbNote = '';
+function loadOne(url) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = url; s.async = false;
+    s.onload = () => res(); s.onerror = () => rej(new Error('불러오기 실패: ' + url));
+    document.head.appendChild(s);
+  });
+}
+async function loadFb(file) {
+  let err;
+  for (const h of FB_HOSTS) { try { await loadOne(h + file); return; } catch (e) { err = e; } }
+  throw err;
+}
+async function initFirebase() {
+  try {
+    await loadFb('firebase-app-compat.js');
+    await loadFb('firebase-firestore-compat.js');
+    await loadFb('firebase-auth-compat.js');
+    if (!window.firebase) throw new Error('파이어베이스 SDK를 불러오지 못했습니다');
+    firebase.initializeApp(FB);
+    fstore = firebase.firestore();
+    try { await firebase.auth().signInAnonymously(); }
+    catch (e) { fbNote = '익명 로그인이 켜져 있지 않습니다 (' + (e.code || e.message) + ')'; }
+    return true;
+  } catch (e) { fbNote = (e && e.message) || String(e); return false; }
+}
+function parseCfg(text) {
+  let t = String(text).trim();
+  const i = t.indexOf('{'), j = t.lastIndexOf('}');
+  if (i < 0 || j < 0) throw new Error('설정 형식을 찾지 못했습니다');
+  t = t.slice(i, j + 1)
+    .replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+    .replace(/'/g, '"')
+    .replace(/,(\s*[}\]])/g, '$1');
+  const o = JSON.parse(t);
+  if (!o.projectId || !o.apiKey) throw new Error('apiKey 또는 projectId가 없습니다');
+  return o;
+}
+
+const SLOTS = [
+  { key: 'morning',  label: '아침',      from: '08:00', to: '09:00' },
+  { key: 'first',    label: '1교시 후',   from: '09:00', to: '10:00' },
+  { key: 'lunch',    label: '점심시간',   from: '12:10', to: '13:20' },
+  { key: 'before',   label: '하교 전',    from: '13:20', to: '15:30' },
+  { key: 'anytime',  label: '수시',      from: null, to: null },
+  { key: 'asneeded', label: '필요할 때',  from: null, to: null },
+];
+const SLOTMAP = Object.fromEntries(SLOTS.map(s => [s.key, s]));
+const MILK = '소연·수빈·동일·동후·도현·강민·은율·재혁·서준';
+
+const DEFAULT_TASKS = {
+  A: [
+    { id: 'a1', slot: 'morning',  text: '아침시간 30분, 40분 종치기' },
+    { id: 'a2', slot: 'morning',  text: '등교 후 태블릿함 열고 점검하기' },
+    { id: 'a3', slot: 'first',    text: '1교시 후 우유 가져오기' },
+    { id: 'a4', slot: 'first',    text: '우유 친구들 책상에 놔주기', note: MILK },
+    { id: 'a5', slot: 'anytime',  text: '수업 시작 종치기' },
+    { id: 'a6', slot: 'anytime',  text: '이동수업 3분 전, 친구들에게 줄 서기 안내하기' },
+    { id: 'a7', slot: 'before',   text: '알림장 검사하기' },
+    { id: 'a8', slot: 'before',   text: '사물함 검사하기' },
+    { id: 'a9', slot: 'before',   text: '수페 퀘스트 올리기' },
+  ],
+  B: [
+    { id: 'b1', slot: 'anytime',  text: '줄 선 뒤 “짝짝, 쉿!” 하고 바르게 섰는지 확인하기' },
+    { id: 'b2', slot: 'anytime',  text: '준비가 되면 담임 선생님 부르기' },
+    { id: 'b3', slot: 'anytime',  text: '매점 관리하기' },
+    { id: 'b4', slot: 'lunch',    text: '우유통 제자리에 가져다놓기' },
+    { id: 'b5', slot: 'lunch',    text: '연구실에서 청소기 가져와 청소기 돌리기' },
+    { id: 'b6', slot: 'lunch',    text: '우유 친구들 다 먹었는지 검사하기', note: MILK },
+    { id: 'b7', slot: 'before',   text: '태블릿함 잠그기' },
+    { id: 'b8', slot: 'before',   text: '책상 서랍 운영 점검', note: '쓰레기·정리 상태만 확인하고, 개인 물건은 보지 않기' },
+    { id: 'b9', slot: 'before',   text: '교실 뒷문 닫기' },
+    { id: 'b10', slot: 'before',  text: '안전 점검: 창문·전등·냉난방·전자기기 확인하기' },
+  ],
+  C: [
+    { id: 'c1', slot: 'morning',  text: '등교 후 교실 불 켜기' },
+    { id: 'c2', slot: 'asneeded', text: '쓰레기 분리수거하기', note: '비닐봉투가 꽉 찼을 때' },
+    { id: 'c3', slot: 'asneeded', text: '새 비닐봉투 열어 두기', note: '선생님 뒤 사물함' },
+    { id: 'c4', slot: 'asneeded', text: '안내장을 낸 친구 이름 확인하기' },
+    { id: 'c5', slot: 'asneeded', text: '안내장 함께 나누어 주기' },
+    { id: 'c6', slot: 'before',   text: '함께 책상 줄 맞추기' },
+    { id: 'c7', slot: 'before',   text: '종례 인사하기' },
+  ],
+};
+const ROLE_TITLE = { A: '학습 · 수업 준비', B: '교실 환경 · 이동 운영' };
+
+/* ── 저장소 ──────────────────────────── */
+const Store = {
+  kind: 'local', cdb: null, readOnly: false, chains: {}, standalone: false, note: '',
+  fpath(p) { return 'classes/' + CLASS_ID + '/' + p; },
+
+  async init() {
+    if (window.claude && window.claude.use) {
+      try { const d = await window.claude.use('db'); if (d) { this.cdb = d; this.kind = 'db'; return; } } catch (e) {}
+    } else {
+      this.standalone = true;
+    }
+    if (FB && FB.projectId) {
+      const ok = await initFirebase();
+      this.note = fbNote;
+      if (ok) { this.kind = 'firebase'; return; }
+    }
+    this.kind = 'local';
+  },
+
+  async get(path) {
+    if (this.kind === 'db') {
+      try { const s = await this.cdb.doc(path).get(); return s.exists ? s.data() : null; } catch (e) { return null; }
+    }
+    if (this.kind === 'firebase') {
+      try { const s = await fstore.doc(this.fpath(path)).get(); return s.exists ? s.data() : null; }
+      catch (e) { this.note = (e && e.message) || String(e); return null; }
+    }
+    try { const v = localStorage.getItem('duty66:' + path); return v ? JSON.parse(v) : null; } catch (e) { return null; }
+  },
+
+  set(path, data) {
+    const prev = this.chains[path] || Promise.resolve();
+    const next = prev.catch(() => {}).then(async () => {
+      if (this.kind === 'db') {
+        try { await this.cdb.doc(path).set(data); }
+        catch (e) { if (e && e.code === 'invalid_argument') { Store.readOnly = true; render(); } throw e; }
+        return;
+      }
+      if (this.kind === 'firebase') {
+        try { await fstore.doc(this.fpath(path)).set(data); }
+        catch (e) { Store.note = (e && e.message) || String(e); throw e; }
+        return;
+      }
+      try { localStorage.setItem('duty66:' + path, JSON.stringify(data)); } catch (e) {}
+      local.emit(path, data);
+    });
+    this.chains[path] = next;
+    return next;
+  },
+
+  watch(path, cb) {
+    if (this.kind === 'db') {
+      try { return this.cdb.doc(path).onSnapshot(s => cb(s.exists ? s.data() : null), () => {}); } catch (e) { return () => {}; }
+    }
+    if (this.kind === 'firebase') {
+      try { return fstore.doc(this.fpath(path)).onSnapshot(s => cb(s.exists ? s.data() : null), () => {}); } catch (e) { return () => {}; }
+    }
+    this.get(path).then(cb);
+    return local.on(path, cb);
+  },
+
+  async recent(n) {
+    if (this.kind === 'db') {
+      try { const q = await this.cdb.collection('days').orderBy('date', 'desc').limit(n).get(); return q.docs.map(d => d.data()); }
+      catch (e) { return []; }
+    }
+    if (this.kind === 'firebase') {
+      try {
+        const q = await fstore.collection('classes/' + CLASS_ID + '/days').orderBy('date', 'desc').limit(n).get();
+        return q.docs.map(d => d.data());
+      } catch (e) { return []; }
+    }
+    const out = [];
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('duty66:days/')) out.push(JSON.parse(localStorage.getItem(k)));
+      }
+    } catch (e) {}
+    return out.sort((x, y) => (y.date || '').localeCompare(x.date || '')).slice(0, n);
+  },
+
+  async lease() {
+    if (this.kind === 'db') {
+      try { const r = await this.cdb.doc('config/lock').acquire({ holder: TAB, ttlMs: 8000 }); return !!r.acquired; } catch (e) { return true; }
+    }
+    if (this.kind === 'firebase') {
+      try {
+        const ref = fstore.doc(this.fpath('config/lock'));
+        return await fstore.runTransaction(async tx => {
+          const s = await tx.get(ref);
+          const now = Date.now();
+          const d = s.exists ? s.data() : null;
+          if (d && d.until > now && d.holder !== TAB) return false;
+          tx.set(ref, { holder: TAB, until: now + 8000 });
+          return true;
+        });
+      } catch (e) { return true; }
+    }
+    return true;
+  },
+};
+const local = {
+  subs: {},
+  on(p, cb) { (this.subs[p] = this.subs[p] || []).push(cb); return () => { this.subs[p] = (this.subs[p] || []).filter(f => f !== cb); }; },
+  emit(p, v) { (this.subs[p] || []).forEach(f => f(v)); },
+};
+
+/* ── 상태 ────────────────────────────── */
+const state = {
+  view: 'board', mode: 'focus', focusSlot: null, showLate: false, me: null, picked: false, peek: false,
+  today: null, day: null, roster: null, rotation: null, tasks: null,
+  holidays: null, slotTimes: null, recent: [], lastSlot: undefined,
+};
+
+const clamp = n => Math.max(0, Math.min(100, n));
+const pad = n => String(n).padStart(2, '0');
+const dkey = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const fromKey = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function roster() { return state.roster || { count: 22, names: {} }; }
+function tasksOf() { return state.tasks || DEFAULT_TASKS; }
+function holidays() { return (state.holidays && state.holidays.dates) || []; }
+function slotWindow(key) {
+  const b = SLOTMAP[key] || {}, ov = (state.slotTimes || {})[key] || {};
+  return { from: ov.from || b.from, to: ov.to || b.to };
+}
+function nameOf(no) { if (!no) return ''; const n = (roster().names || {})[String(no)]; return n ? String(n).trim() : ''; }
+function who(no) { return no ? no + '번' + (nameOf(no) ? ' ' + nameOf(no) : '') : '–'; }
+function isSchoolDay(d) { const w = d.getDay(); return w !== 0 && w !== 6 && !holidays().includes(dkey(d)); }
+function nextSchoolDay(from) {
+  const d = new Date(from.getFullYear(), from.getMonth(), from.getDate());
+  for (let i = 0; i < 40; i++) { d.setDate(d.getDate() + 1); if (isSchoolDay(d)) return d; }
+  return d;
+}
+function defaultRotation() { const c = roster().count || 22; return { order: Array.from({ length: c }, (_, i) => i + 1), cursor: 0, requeue: [] }; }
+function cloneRot(r) {
+  const b = r && Array.isArray(r.order) && r.order.length ? r : defaultRotation();
+  return { order: b.order.slice(), cursor: b.cursor || 0, requeue: (b.requeue || []).slice() };
+}
+function pickFrom(rot) {
+  if (rot.requeue.length) return rot.requeue.shift();
+  const n = rot.order[rot.cursor % rot.order.length];
+  rot.cursor = (rot.cursor + 1) % rot.order.length;
+  return n;
+}
+function pickPair(rot) { const a = pickFrom(rot); let b = pickFrom(rot); if (b === a) b = pickFrom(rot); return [a, b]; }
+
+function nowMin() { const d = new Date(); return d.getHours() * 60 + d.getMinutes(); }
+function toMin(s) { if (!s) return null; const [h, m] = s.split(':').map(Number); return h * 60 + m; }
+function currentSlot() {
+  const n = nowMin();
+  for (const s of SLOTS) { const w = slotWindow(s.key); if (w.from && w.to && n >= toMin(w.from) && n < toMin(w.to)) return s.key; }
+  return null;
+}
+function upcomingSlot() {
+  const n = nowMin();
+  let best = null, bestv = Infinity;
+  for (const s of SLOTS) { const w = slotWindow(s.key); if (w.from && toMin(w.from) > n && toMin(w.from) < bestv) { best = s.key; bestv = toMin(w.from); } }
+  return best;
+}
+function slotPassed(key) { const w = slotWindow(key); return w.to ? nowMin() >= toMin(w.to) : false; }
+function autoSlot() { return currentSlot() || upcomingSlot() || 'anytime'; }
+function activeSlot() { return state.focusSlot || autoSlot(); }
+
+/* ── 나는 누구인가 ───────────────────── */
+function loadMe() {
+  let v = null;
+  try { v = localStorage.getItem('duty66:me'); } catch (e) {}
+  if (v === null || v === '') { state.picked = false; state.me = null; return; }
+  state.picked = true;
+  state.me = v === 'room' ? null : (parseInt(v, 10) || null);
+}
+function saveMe(v) {
+  try { localStorage.setItem('duty66:me', v == null ? 'room' : String(v)); } catch (e) {}
+  state.picked = true; state.me = v;
+}
+function isRoom() { return state.picked && state.me == null; }
+function myRole() {
+  if (!state.picked || state.me == null) return 'ALL';
+  const d = state.day || {};
+  if (d.a === state.me) return 'A';
+  if (d.b === state.me) return 'B';
+  return null;
+}
+function canCheck(it) {
+  const r = myRole();
+  if (r === 'ALL') return true;
+  if (!r) return false;
+  return it.role === r || it.role === 'C';
+}
+function myNextDuty() {
+  if (state.me == null) return null;
+  const d0 = state.today ? fromKey(state.today) : new Date();
+  const day = state.day || {};
+  if (day.a === state.me) return { date: d0, role: 'A', days: 0 };
+  if (day.b === state.me) return { date: d0, role: 'B', days: 0 };
+  const rot = cloneRot(state.rotation);
+  let d = d0;
+  for (let i = 0; i < 140; i++) {
+    d = nextSchoolDay(d);
+    const [a, b] = pickPair(rot);
+    if (a === state.me) return { date: d, role: 'A', days: i + 1 };
+    if (b === state.me) return { date: d, role: 'B', days: i + 1 };
+  }
+  return null;
+}
+function teacherPin() { return (state.teacher && state.teacher.pin) || ''; }
+function unlocked() { try { return localStorage.getItem('duty66:unlock') === teacherPin(); } catch (e) { return false; } }
+function askPin() {
+  const p = teacherPin();
+  if (!p) return true;
+  if (unlocked()) return true;
+  const v = prompt('선생님 번호를 넣어 주세요');
+  if (v === p) { try { localStorage.setItem('duty66:unlock', p); } catch (e) {} return true; }
+  if (v !== null) alert('번호가 맞지 않습니다.');
+  return false;
+}
+
+function itemsForSlot(key) {
+  const t = tasksOf(), out = [];
+  (t.A || []).forEach(x => { if (x.slot === key) out.push({ ...x, role: 'A', by: 'a' }); });
+  (t.B || []).forEach(x => { if (x.slot === key) out.push({ ...x, role: 'B', by: 'b' }); });
+  (t.C || []).forEach(x => { if (x.slot === key) out.push({ ...x, role: 'C', by: 'both' }); });
+  return out;
+}
+function allItems() { return SLOTS.flatMap(s => itemsForSlot(s.key)); }
+function checks() { return (state.day && state.day.checks) || {}; }
+
+/* ── 초기화 ──────────────────────────── */
+async function boot() {
+  loadMe();
+  render();
+  await Store.init();
+  Store.watch('config/teacher', v => { state.teacher = v; softRender(); });
+  Store.watch('config/roster', v => { state.roster = v; softRender(); });
+  Store.watch('config/rotation', v => { state.rotation = v; softRender(); });
+  Store.watch('config/tasks', v => { state.tasks = v && v.A ? v : null; softRender(); });
+  Store.watch('config/holidays', v => { state.holidays = v; softRender(); });
+  Store.watch('config/slots', v => { state.slotTimes = v; softRender(); });
+
+  state.teacher = await Store.get('config/teacher');
+  state.roster = await Store.get('config/roster');
+  state.rotation = await Store.get('config/rotation');
+  const t = await Store.get('config/tasks'); state.tasks = t && t.A ? t : null;
+  state.holidays = await Store.get('config/holidays');
+  state.slotTimes = await Store.get('config/slots');
+  if (!state.rotation) state.rotation = defaultRotation();
+
+  await openToday();
+  render();
+  setInterval(tick, 15000);
+  tick();
+}
+
+let dayUnsub = null;
+async function openToday() {
+  const now = new Date(), key = dkey(now);
+  state.today = key;
+  if (dayUnsub) { dayUnsub(); dayUnsub = null; }
+  if (!isSchoolDay(now)) { state.day = await Store.get('days/' + key); return; }
+  state.day = await ensureDay(key);
+  dayUnsub = Store.watch('days/' + key, v => { if (v) { state.day = v; softRender(); } });
+}
+
+async function ensureDay(key) {
+  let d = await Store.get('days/' + key);
+  if (d) return d;
+  if (Store.readOnly) return null;
+  const got = await Store.lease();
+  if (!got) { await new Promise(r => setTimeout(r, 1500)); return await Store.get('days/' + key); }
+  d = await Store.get('days/' + key);
+  if (d) return d;
+  const rot = cloneRot(state.rotation);
+  const [a, b] = pickPair(rot);
+  const day = { date: key, a, b, checks: {}, absent: [], swaps: [], wrap: {}, createdAt: new Date().toISOString() };
+  try { await Store.set('days/' + key, day); await Store.set('config/rotation', rot); state.rotation = rot; } catch (e) {}
+  return day;
+}
+
+function tick() {
+  const key = dkey(new Date());
+  if (key !== state.today) { state.focusSlot = null; openToday().then(render); return; }
+  paintTop();
+  const cs = autoSlot();
+  if (state.view === 'board' && cs !== state.lastSlot) { state.lastSlot = cs; render(); }
+}
+
+/* ── 동작 ────────────────────────────── */
+function dayCopy() {
+  const d = state.day || {};
+  return { ...d, checks: { ...(d.checks || {}) }, absent: (d.absent || []).slice(), swaps: (d.swaps || []).slice(), wrap: { ...(d.wrap || {}) } };
+}
+async function toggleTask(id, by) {
+  if (!state.day || Store.readOnly) return;
+  const day = dayCopy();
+  if (day.checks[id]) delete day.checks[id];
+  else day.checks[id] = { t: new Date().toISOString(), by };
+  state.day = day; softRender();
+  try { await Store.set('days/' + day.date, day); } catch (e) {}
+}
+async function toggleWrap(role) {
+  if (!state.day || Store.readOnly) return;
+  const day = dayCopy();
+  if (day.wrap[role]) delete day.wrap[role]; else day.wrap[role] = { t: new Date().toISOString() };
+  state.day = day; softRender();
+  try { await Store.set('days/' + day.date, day); } catch (e) {}
+}
+async function markAbsent(role) {
+  if (!state.day || Store.readOnly) return;
+  const day = dayCopy(), out = day[role], other = role === 'a' ? day.b : day.a;
+  const rotBefore = cloneRot(state.rotation), rot = cloneRot(state.rotation);
+  let rep = pickFrom(rot);
+  if (rep === other || rep === out) rep = pickFrom(rot);
+  rot.requeue.unshift(out);
+  day[role] = rep; day.absent.push(out);
+  day.swaps.push({ role, out, in: rep, rotBefore, t: new Date().toISOString() });
+  state.day = day; state.rotation = rot; render();
+  try { await Store.set('days/' + day.date, day); await Store.set('config/rotation', rot); } catch (e) {}
+}
+async function undoAbsent() {
+  if (!state.day || Store.readOnly) return;
+  const day = dayCopy(), last = day.swaps.pop();
+  if (!last) return;
+  day[last.role] = last.out;
+  day.absent = day.absent.filter(n => n !== last.out);
+  state.day = day; state.rotation = cloneRot(last.rotBefore); render();
+  try { await Store.set('days/' + day.date, day); await Store.set('config/rotation', state.rotation); } catch (e) {}
+}
+
+/* ── 상단 ────────────────────────────── */
+function paintTop() {
+  const meBtn = document.getElementById('bMe');
+  const mBtn = document.getElementById('bMenu');
+  const pctEl = document.getElementById('hPct');
+  if (!state.picked) {
+    meBtn.hidden = true; mBtn.hidden = true; pctEl.hidden = true;
+  } else {
+    meBtn.hidden = false; pctEl.hidden = false;
+    meBtn.textContent = state.me == null ? '교실 화면' : who(state.me);
+    mBtn.hidden = state.me != null;
+  }
+
+  const now = new Date(), d = state.today ? fromKey(state.today) : now;
+  document.getElementById('hDate').textContent = (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+  document.getElementById('hWd').textContent = WD[d.getDay()] + '요일';
+  document.getElementById('hClock').textContent = pad(now.getHours()) + ':' + pad(now.getMinutes());
+  const list = allItems(), ch = checks();
+  const done = list.filter(x => ch[x.id]).length;
+  const el = document.getElementById('hPct');
+  el.innerHTML = done + ' / ' + list.length + '<span class="wideonly">&nbsp;완료</span>';
+  el.className = 'chip' + (list.length && done === list.length ? ' ok' : '');
+}
+
+/* ── 지금 할 일 ──────────────────────── */
+const CHECK_SVG = '<svg viewBox="0 0 22 22"><path d="M5 11.5 9 15.5 17 6.5"/></svg>';
+
+function focusRow(it) {
+  const c = checks()[it.id];
+  const label = it.role === 'C' ? '함께' : it.role;
+  const inner = '<span class="tagsq ' + it.role + '">' + label + '</span>'
+    + '<span class="ftext"><span class="t">' + esc(it.text) + '</span>'
+    + (it.note ? '<span class="n">' + esc(it.note) + '</span>' : '') + '</span>'
+    + '<span class="ring">' + CHECK_SVG + '</span>';
+  if (!canCheck(it)) return '<div class="frow locked' + (c ? ' done' : '') + '">' + inner + '</div>';
+  return '<button class="frow' + (c ? ' done' : '') + '" data-id="' + it.id + '" data-by="' + it.by + '">' + inner + '</button>';
+}
+
+function wrapRow(role) {
+  const key = role === 'A' ? 'a' : 'b';
+  const on = state.day && state.day.wrap && state.day.wrap[key];
+  const no = (state.day || {})[key];
+  const mine = myRole();
+  const can = mine === 'ALL' || mine === role;
+  const inner = '<span class="tagsq ' + role + '">' + role + '</span>'
+    + '<span class="ftext"><span class="t">' + esc(who(no)) + ' — 오늘 맡은 일 끝까지 확인</span>'
+    + '<span class="n">다 하고 나서 눌러 주세요</span></span>'
+    + '<span class="ring">' + CHECK_SVG + '</span>';
+  if (!can) return '<div class="frow wrapi locked' + (on ? ' done' : '') + '">' + inner + '</div>';
+  return '<button class="frow wrapi' + (on ? ' done' : '') + '" data-wrap="' + key + '">' + inner + '</button>';
+}
+
+function focusCard() {
+  const key = activeSlot();
+  const s = SLOTMAP[key], w = slotWindow(key);
+  const isNow = key === autoSlot() && !state.focusSlot;
+  const items = itemsForSlot(key);
+  const ch = checks();
+  const done = items.filter(i => ch[i.id]).length;
+
+  let body = items.map(focusRow).join('');
+  if (key === 'before') body += wrapRow('A') + wrapRow('B');
+  if (!body) body = '<div class="fempty">이 시간에 할 일은 없어요.</div>';
+
+  const live = isNow && !!currentSlot();
+  const soon = isNow && !currentSlot() && key === upcomingSlot();
+  const heading = live ? '지금 · ' + s.label : soon ? '곧 · ' + s.label : s.label;
+
+  return '<section class="focus' + (live ? '' : ' notnow') + '">'
+    + '<div class="fhead">'
+    + (live ? '<span class="livedot"></span>' : '')
+    + '<span class="ttl dh">' + heading + '</span>'
+    + (w.from ? '<span class="tm mono">' + w.from + '–' + w.to + '</span>' : '')
+    + '<span class="chip' + (items.length && done === items.length ? ' ok' : '') + '">' + done + ' / ' + items.length + '</span>'
+    + (state.focusSlot ? '<button class="backnow" data-backnow="1">지금으로 돌아가기</button>' : '')
+    + '</div>' + body + '</section>';
+}
+
+function lateBlock() {
+  const ch = checks();
+  const late = allItems().filter(i => !ch[i.id] && slotPassed(i.slot));
+  if (!late.length) return '';
+  return '<div class="lateblk">'
+    + '<button class="latehd" data-togglelate="1">'
+    + '<span>아직 안 한 일</span><span class="cnt">' + late.length + '개 ' + (state.showLate ? '▲' : '▼') + '</span></button>'
+    + (state.showLate ? late.map(focusRow).join('') : '')
+    + '</div>';
+}
+
+function timeline() {
+  const ch = checks(), cur = autoSlot(), sel = activeSlot();
+  return '<div class="timeline">' + SLOTS.map(s => {
+    const items = itemsForSlot(s.key);
+    const done = items.filter(i => ch[i.id]).length;
+    const full = items.length > 0 && done === items.length;
+    const miss = !full && slotPassed(s.key) && done < items.length;
+    const cls = ['tpill', s.key === sel ? 'sel' : '', s.key === cur ? 'cur' : '', full ? 'full' : '', miss ? 'miss' : ''].filter(Boolean).join(' ');
+    const mark = full ? '✓ 다 했어요' : miss ? '● 남았어요' : done + ' / ' + items.length;
+    return '<button class="' + cls + '" data-slot="' + s.key + '"><span class="lb">' + s.label + '</span><span class="st">' + mark + '</span></button>';
+  }).join('') + '</div>';
+}
+
+function heroSide(role) {
+  const d = state.day || {}, key = role === 'A' ? 'a' : 'b';
+  const no = d[key], nm = nameOf(no);
+  const swapped = (d.swaps || []).some(x => x.role === key);
+  const wrapped = d.wrap && d.wrap[key];
+  return '<div class="hside ' + role + '">'
+    + '<span class="tagsq ' + role + '">' + role + '</span>'
+    + '<span class="hnum dh mono">' + (no ? no : '–') + '<small>번</small></span>'
+    + '<span class="hname dh' + (nm ? '' : ' empty') + '">' + (nm ? esc(nm) : '설정에서 이름 넣기') + '</span>'
+    + '<span class="hflags">'
+    + (wrapped ? '<span class="chip ok">마무리 ✓</span>' : '')
+    + (swapped ? '<span class="chip late">교체됨</span>' : '') + '</span>'
+    + '<span class="hrole">' + ROLE_TITLE[role] + '</span></div>';
+}
+
+/* ── 전체 보기 ───────────────────────── */
+function allRow(it) {
+  const c = checks()[it.id], over = !c && slotPassed(it.slot);
+  const tm = c ? new Date(c.t) : null;
+  const inner = '<span class="box">' + CHECK_SVG + '</span>'
+    + '<span class="tt"><span class="t">' + esc(it.text) + '</span>'
+    + (it.note ? '<span class="n">' + esc(it.note) + '</span>' : '') + '</span>'
+    + '<span class="tmk mono">' + (tm ? pad(tm.getHours()) + ':' + pad(tm.getMinutes()) : (over ? '밀림' : '')) + '</span>';
+  const cls = 'trow' + (c ? ' done' : '') + (over ? ' overdue' : '');
+  if (!canCheck(it)) return '<div class="' + cls + ' locked">' + inner + '</div>';
+  return '<button class="' + cls + '" data-id="' + it.id + '" data-by="' + it.by + '">' + inner + '</button>';
+}
+function allCard(role) {
+  const t = tasksOf()[role] || [];
+  const by = role === 'A' ? 'a' : role === 'B' ? 'b' : 'both';
+  const ch = checks(), done = t.filter(x => ch[x.id]).length;
+  const title = role === 'C' ? '함께 하는 일' : '당번 ' + role;
+  let body = '';
+  for (const s of SLOTS) {
+    const items = t.filter(x => x.slot === s.key);
+    if (!items.length) continue;
+    const w = slotWindow(s.key);
+    body += '<div class="slotgrp"><div class="slothdr"><span>' + s.label + '</span>'
+      + (w.from ? '<span class="tm mono">' + w.from + '–' + w.to + '</span>' : '') + '</div>'
+      + items.map(x => allRow({ ...x, by, role })).join('') + '</div>';
+  }
+  return '<section class="card ' + role + (role === 'C' ? ' common' : '') + '">'
+    + '<div class="chead"><span class="tagsq ' + role + '">' + (role === 'C' ? '함께' : role) + '</span>'
+    + '<span class="ttl dh">' + title + (role === 'C' ? '' : ' · ' + who((state.day || {})[by])) + '</span>'
+    + '<span class="cnt mono">' + done + ' / ' + t.length + '</span></div>'
+    + (role === 'C' ? '<div class="cbody">' + body + '</div>' : body) + '</section>';
+}
+
+/* ── 번호 고르기 ─────────────────────── */
+function pickView() {
+  const c = roster().count || 22;
+  let html = '<div class="picker"><h2 class="dh">누구인가요?</h2>'
+    + '<p>한 번만 고르면 이 기기는 다음부터 바로 열립니다.</p>'
+    + '<button class="roombtn" data-pickroom="1">교실 화면 (선생님용)<small>모든 당번의 할 일이 다 보이고, 설정을 열 수 있습니다</small></button>'
+    + '<div class="nogrid">';
+  for (let i = 1; i <= c; i++) {
+    html += '<button class="nobtn" data-pickno="' + i + '"><span class="n">' + i + '번</span>'
+      + (nameOf(i) ? '<span class="nm">' + esc(nameOf(i)) + '</span>' : '') + '</button>';
+  }
+  return html + '</div></div>';
+}
+
+/* ── 학생 화면 ───────────────────────── */
+function meBlock() {
+  const r = myRole();
+  const d = state.day || {};
+  if (r === 'A' || r === 'B') {
+    const partnerKey = r === 'A' ? 'b' : 'a';
+    const partnerRole = r === 'A' ? 'B' : 'A';
+    return '<div class="mecard ' + r + '"><div class="melead">'
+      + '<span class="tagsq ' + r + '">' + r + '</span>'
+      + '<span class="metitle dh">오늘 나는 당번 ' + r + '</span></div>'
+      + '<div class="mesub">' + ROLE_TITLE[r] + '</div>'
+      + '<div class="todaypair"><span class="tp"><span class="tagsq ' + partnerRole + '">' + partnerRole + '</span>'
+      + '<span class="v dh">짝 당번 ' + esc(who(d[partnerKey])) + '</span></span></div></div>';
+  }
+  const nx = myNextDuty();
+  let html = '<div class="mecard"><div class="melead"><span class="metitle dh">오늘은 당번이 아니에요</span></div>'
+    + '<div class="todaypair">'
+    + '<span class="tp"><span class="tagsq A">A</span><span class="v dh">' + esc(who(d.a)) + '</span></span>'
+    + '<span class="tp"><span class="tagsq B">B</span><span class="v dh">' + esc(who(d.b)) + '</span></span>'
+    + '</div></div>';
+  if (nx) {
+    const dd = nx.date;
+    html += '<div class="mecard ' + nx.role + '"><div class="mesub" style="margin:0">내 당번 날짜</div>'
+      + '<div class="mewhen"><span class="big dh">' + (dd.getMonth() + 1) + '월 ' + dd.getDate() + '일 ' + WD[dd.getDay()] + '요일</span>'
+      + '<span class="cnt">등교일로 ' + nx.days + '일 뒤 · 당번 ' + nx.role + ' (' + ROLE_TITLE[nx.role] + ')</span></div>'
+      + '<div class="mesub">중간에 결석한 친구가 있으면 하루 이틀 당겨지거나 밀릴 수 있어요.</div></div>';
+  }
+  return html;
+}
+
+/* ── 보드 ────────────────────────────── */
+function boardView() {
+  const now = new Date();
+  let html = '';
+  if (Store.kind === 'local' && !Store.standalone) html += '<div class="notice"><b>이 컴퓨터에만 저장되고 있어요.</b><p>체크 기록이 다른 기기와 공유되지 않습니다.</p></div>';
+  if (Store.readOnly) html += '<div class="notice"><b>보기 전용으로 열렸어요.</b><p>체크는 되지만 저장되지 않습니다.</p></div>';
+
+  if (!isSchoolDay(now)) {
+    const rot = cloneRot(state.rotation), [a, b] = pickPair(rot), nd = nextSchoolDay(now);
+    html += '<div class="notice"><b>오늘은 등교일이 아니에요.</b><p>다음 등교일 '
+      + (nd.getMonth() + 1) + '/' + nd.getDate() + '(' + WD[nd.getDay()] + ') 당번은 <b>' + esc(who(a) + ' · ' + who(b)) + '</b> 입니다.</p></div>';
+    return html;
+  }
+  if (!state.day) return html + '<div class="notice"><b>오늘 당번을 정하는 중이에요.</b><p>잠시만 기다려 주세요.</p></div>';
+
+  const mine = myRole();
+  const student = state.me != null;
+
+  if (student) {
+    html += meBlock();
+    if (!mine) {
+      html += '<div class="footbar"><button class="ghost" data-peek="1">'
+        + (state.peek ? '오늘 할 일 접기' : '오늘 할 일 구경하기') + '</button></div>';
+      if (state.peek) html += focusCard() + timeline();
+      return html;
+    }
+  } else {
+    html += '<section class="hero">' + heroSide('A') + '<div class="sep"></div>' + heroSide('B') + '</section>';
+  }
+
+  if (state.mode === 'focus') {
+    html += lateBlock();
+    html += focusCard();
+    html += timeline();
+  } else {
+    html += '<div class="grid">' + allCard('A') + allCard('B') + '</div>' + allCard('C');
+  }
+
+  const ch = checks(), list = allItems();
+  const done = list.filter(x => ch[x.id]).length;
+  const rot = cloneRot(state.rotation), [na, nb] = pickPair(rot), nd = nextSchoolDay(fromKey(state.today));
+  html += '<div class="footbar">'
+    + '<button class="ghost" data-mode="1">' + (state.mode === 'focus' ? '오늘 할 일 전체 보기' : '지금 할 일만 보기') + '</button>'
+    + '<span class="rail"><i style="width:' + (list.length ? clamp(done / list.length * 100) : 0) + '%"></i></span>'
+    + (student ? '' : '<span class="muted">다음 당번 ' + (nd.getMonth() + 1) + '/' + nd.getDate() + '(' + WD[nd.getDay()] + ') · ' + esc(who(na) + ' · ' + who(nb)) + '</span>')
+    + '</div>';
+  return html;
+}
+
+/* ── 기록 ────────────────────────────── */
+async function loadRecent() { state.recent = await Store.recent(60); render(); }
+function logView() {
+  const rows = state.recent, total = allItems().length, tally = {};
+  rows.forEach(r => { [r.a, r.b].forEach(n => { if (n) tally[n] = (tally[n] || 0) + 1; }); });
+  let html = '<div class="panel"><h2 class="dh">당번 기록</h2><p class="hint">최근 등교일 순서입니다.</p>';
+  if (!rows.length) html += '<p class="muted">아직 기록이 없습니다.</p>';
+  else {
+    html += '<div class="scrollx"><table><thead><tr><th>날짜</th><th>당번 A</th><th>당번 B</th><th>완료</th><th style="width:110px"></th><th>결석 교체</th></tr></thead><tbody>';
+    for (const r of rows) {
+      const d = fromKey(r.date), done = Object.keys(r.checks || {}).length;
+      html += '<tr><td class="mono">' + (d.getMonth() + 1) + '/' + d.getDate() + ' (' + WD[d.getDay()] + ')</td>'
+        + '<td>' + esc(who(r.a)) + '</td><td>' + esc(who(r.b)) + '</td>'
+        + '<td class="mono">' + done + '/' + total + '</td>'
+        + '<td><span class="bar"><i style="width:' + (total ? clamp(done / total * 100) : 0) + '%"></i></span></td>'
+        + '<td class="muted">' + ((r.absent || []).map(n => n + '번').join(', ') || '–') + '</td></tr>';
+    }
+    html += '</tbody></table></div>';
+  }
+  html += '<div class="sect"><h3 class="dh">학생별 당번 횟수</h3><div>';
+  const c = roster().count || 22;
+  for (let i = 1; i <= c; i++) html += '<span class="pill">' + esc(who(i)) + ' · ' + (tally[i] || 0) + '회</span>';
+  html += '</div></div><div class="row" style="margin-top:14px"><button class="btn" data-back="1">교실 화면으로</button></div></div>';
+  return html;
+}
+
+/* ── 저장 위치 ───────────────────────── */
+const RULES = "rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /classes/{classId}/{doc=**} {\n      allow read, write: if request.auth != null;\n    }\n  }\n}";
+
+function storageSection() {
+  const k = Store.kind;
+  const head = k === 'db' ? '클로드 저장소에 저장 중'
+    : k === 'firebase' ? '파이어베이스에 저장 중 · ' + esc(FB.projectId || '')
+    : '이 브라우저에만 저장 중';
+  const desc = k === 'db' ? '이 주소를 여는 기기가 모두 같은 기록을 봅니다. 파이어베이스 설정은 깃허브에 올린 주소에서만 쓰입니다.'
+    : k === 'firebase' ? '교실 PC와 선생님 패드가 같은 기록을 봅니다.'
+    : '기록이 이 브라우저 안에만 남습니다. 아래에 파이어베이스 설정을 넣으면 기기끼리 공유됩니다.';
+  const cls = k === 'local' ? 'late' : 'ok';
+
+  let html = '<div class="sect"><h3 class="dh">저장 위치</h3>'
+    + '<div class="row" style="margin-bottom:6px"><span class="chip ' + cls + '">' + head + '</span></div>'
+    + '<p class="muted" style="margin:0 0 10px">' + desc + '</p>';
+  if (Store.note) html += '<p class="muted" style="color:var(--late);margin:0 0 10px">알림: ' + esc(Store.note) + '</p>';
+
+  html += '<label for="fbBox">파이어베이스 설정 붙여넣기</label>'
+    + '<p class="muted" style="margin:0 0 6px">콘솔 → 프로젝트 설정 → 내 앱 → SDK 설정 및 구성에서 <code>const firebaseConfig = { … }</code> 부분을 통째로 복사해 붙여넣으세요.</p>'
+    + '<textarea id="fbBox" style="min-height:120px" placeholder=\'const firebaseConfig = {\n  apiKey: "...",\n  projectId: "...",\n  appId: "..."\n};\'></textarea>'
+    + '<div class="row" style="margin-top:8px"><button class="btn pri" id="fbSave">설정 저장하고 새로고침</button>'
+    + '<button class="btn" id="fbClear">설정 지우기</button></div>'
+    + '<p class="muted" style="margin:10px 0 4px">이 기기에만 적용됩니다. 모든 기기에 적용하려면 index.html 맨 위 <code>FIREBASE_CONFIG</code> 칸에 같은 값을 넣어 주세요.</p>'
+    + '<details style="margin-top:10px"><summary class="muted" style="cursor:pointer">파이어스토어 보안 규칙 (콘솔에 붙여넣기)</summary>'
+    + '<pre>' + esc(RULES) + '</pre></details>'
+    + '</div>';
+  return html;
+}
+
+/* ── 설정 ────────────────────────────── */
+function settingsView() {
+  const r = roster(), rot = cloneRot(state.rotation), t = tasksOf();
+  const [na, nb] = pickPair(cloneRot(state.rotation));
+  let html = '<div class="panel"><h2 class="dh">설정</h2><p class="hint">바꾼 내용은 바로 저장되고, 열어 둔 모든 화면에 반영됩니다.</p>'
+    + '<div class="row"><button class="btn" data-back="1">교실 화면으로</button></div>'
+    + storageSection();
+
+  html += '<div class="sect"><h3 class="dh">명단</h3>'
+    + '<p class="muted" style="margin:0 0 8px">한 줄에 한 명씩, 1번부터 순서대로 이름을 적어 주세요.</p>'
+    + '<div class="row" style="margin-bottom:8px"><label style="margin:0">학생 수</label>'
+    + '<input type="number" id="sCount" min="2" max="40" value="' + (r.count || 22) + '" style="width:80px"></div>'
+    + '<textarea id="sNames" placeholder="김소연&#10;이수빈&#10;박동일">'
+    + esc(Array.from({ length: r.count || 22 }, (_, i) => (r.names || {})[String(i + 1)] || '').join('\n'))
+    + '</textarea><div class="row" style="margin-top:8px"><button class="btn pri" id="saveNames">명단 저장</button></div></div>';
+
+  html += '<div class="sect"><h3 class="dh">순번</h3>'
+    + '<p class="muted" style="margin:0 0 8px">다음 등교일 당번은 <b>' + esc(who(na) + ' · ' + who(nb)) + '</b> 입니다.</p>';
+  if (rot.requeue.length) html += '<p class="muted" style="margin:0 0 8px">결석으로 밀린 당번: ' + rot.requeue.map(n => n + '번').join(', ') + '</p>';
+  html += '<div class="row"><label style="margin:0">다음 당번을 지정</label><select id="sCursor" style="width:130px">'
+    + Array.from({ length: r.count || 22 }, (_, i) => '<option value="' + i + '"' + (rot.cursor % (r.count || 22) === i ? ' selected' : '') + '>' + (i + 1) + '번부터</option>').join('')
+    + '</select><button class="btn" id="saveCursor">순번 맞추기</button>'
+    + '<button class="btn warn" id="clearQ">밀린 당번 지우기</button></div></div>';
+
+  html += '<div class="sect"><h3 class="dh">휴업일</h3>'
+    + '<p class="muted" style="margin:0 0 8px">주말은 자동으로 빠집니다. 재량휴업일·방학만 넣어 주세요.</p>'
+    + '<div class="row" style="margin-bottom:8px"><input type="date" id="sHol" style="width:180px"><button class="btn" id="addHol">추가</button></div><div>'
+    + (holidays().length ? holidays().sort().map(h => '<span class="pill">' + h + ' <button class="linkbtn" data-delhol="' + h + '" style="color:var(--late)">✕</button></span>').join('') : '<span class="muted">등록된 날이 없습니다.</span>')
+    + '</div></div>';
+
+  html += '<div class="sect"><h3 class="dh">시간대</h3><p class="muted" style="margin:0 0 8px">이 시간이 되면 화면이 알아서 해당 묶음으로 넘어갑니다.</p>';
+  for (const s of SLOTS) {
+    if (!SLOTMAP[s.key].from) continue;
+    const w = slotWindow(s.key);
+    html += '<div class="row" style="margin-bottom:6px"><span style="width:82px;font-weight:600">' + s.label + '</span>'
+      + '<input type="time" data-slotfrom="' + s.key + '" value="' + w.from + '" style="width:130px"><span class="muted">–</span>'
+      + '<input type="time" data-slotto="' + s.key + '" value="' + w.to + '" style="width:130px"></div>';
+  }
+  html += '<div class="row" style="margin-top:8px"><button class="btn pri" id="saveSlots">시간대 저장</button></div></div>';
+
+  for (const role of ['A', 'B', 'C']) {
+    const title = role === 'C' ? '함께 하는 일' : '당번 ' + role + ' 미션 — ' + ROLE_TITLE[role];
+    html += '<div class="sect"><h3 class="dh">' + title + '</h3><div id="ed' + role + '">';
+    (t[role] || []).forEach(x => {
+      html += '<div class="ed" data-role="' + role + '">'
+        + '<select data-f="slot">' + SLOTS.map(s => '<option value="' + s.key + '"' + (s.key === x.slot ? ' selected' : '') + '>' + s.label + '</option>').join('') + '</select>'
+        + '<input type="text" data-f="text" value="' + esc(x.text) + '">'
+        + '<input type="text" data-f="note" placeholder="설명 (선택)" value="' + esc(x.note || '') + '">'
+        + '<button class="del" data-delrow="1" title="삭제">✕</button></div>';
+    });
+    html += '</div><div class="row" style="margin-top:8px"><button class="btn" data-addrow="' + role + '">＋ 항목 추가</button>'
+      + '<button class="btn pri" data-savetasks="' + role + '">저장</button>'
+      + '<button class="btn" data-resettasks="' + role + '">기본값으로</button></div></div>';
+  }
+
+  html += '<div class="sect"><h3 class="dh">선생님 잠금</h3>'
+    + '<p class="muted" style="margin:0 0 8px">번호를 정해 두면, 아이들 기기에서 교실 화면이나 이 설정으로 들어갈 때 번호를 물어봅니다. 비워 두면 잠그지 않습니다.</p>'
+    + '<div class="row"><input type="text" id="pinBox" inputmode="numeric" maxlength="8" value="' + esc(teacherPin()) + '" placeholder="예: 6606" style="width:150px">'
+    + '<button class="btn pri" id="savePin">저장</button></div></div>';
+
+  html += '<div class="sect"><h3 class="dh">오늘 당번 다시 뽑기</h3><p class="muted" style="margin:0 0 8px">오늘 체크한 기록도 함께 지워집니다.</p>'
+    + '<button class="btn warn" id="reroll">오늘 당번 다시 배정</button></div></div>';
+  return html;
+}
+
+/* ── 렌더 ────────────────────────────── */
+function softRender() { if (state.view === 'board') render(); }
+function render() {
+  const main = document.getElementById('main');
+  main.innerHTML = !state.picked ? pickView()
+    : state.view === 'log' ? logView()
+    : state.view === 'settings' ? settingsView()
+    : boardView();
+  paintTop();
+}
+
+/* ── 메뉴 ────────────────────────────── */
+const menuEl = document.getElementById('menu');
+const menuBtn = document.getElementById('bMenu');
+function closeMenu() { menuEl.hidden = true; menuBtn.classList.remove('on'); menuBtn.setAttribute('aria-expanded', 'false'); }
+menuBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  if (menuEl.hidden && !askPin()) return;
+  const open = menuEl.hidden;
+  menuEl.hidden = !open;
+  menuBtn.classList.toggle('on', open);
+  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (open) menuEl.querySelector('[data-m="undo"]').disabled = !((state.day || {}).swaps || []).length;
+});
+document.addEventListener('click', e => { if (!menuEl.hidden && !menuEl.contains(e.target)) closeMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
+
+menuEl.addEventListener('click', e => {
+  const b = e.target.closest('[data-m]'); if (!b) return;
+  const m = b.dataset.m; closeMenu();
+  if (m === 'absent-a' || m === 'absent-b') {
+    const role = m === 'absent-a' ? 'a' : 'b';
+    const no = (state.day || {})[role];
+    if (!no) return;
+    if (confirm(no + '번 학생이 결석했나요?\n다음 번호 학생이 오늘 당번을 맡고, ' + no + '번은 다음 등교일 당번이 됩니다.')) markAbsent(role);
+  } else if (m === 'undo') undoAbsent();
+  else if (m === 'log') { state.view = 'log'; render(); loadRecent(); }
+  else if (m === 'set') { state.view = 'settings'; render(); }
+  else if (m === 'tv') {
+    document.body.classList.toggle('tv');
+    try { localStorage.setItem('duty66:tv', document.body.classList.contains('tv') ? '1' : '0'); } catch (err) {}
+  } else if (m === 'full') {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  }
+});
+
+/* ── 본문 이벤트 ─────────────────────── */
+document.getElementById('bMe').addEventListener('click', () => {
+  state.picked = false; state.view = 'board'; render();
+});
+
+document.getElementById('main').addEventListener('click', async e => {
+  if (e.target.closest('[data-pickroom]')) { if (!askPin()) return; saveMe(null); render(); return; }
+  const pn = e.target.closest('[data-pickno]');
+  if (pn) { saveMe(parseInt(pn.dataset.pickno, 10)); state.mode = 'focus'; render(); return; }
+
+  const row = e.target.closest('[data-id]');
+  if (row) { toggleTask(row.dataset.id, row.dataset.by); return; }
+  const w = e.target.closest('[data-wrap]');
+  if (w) { toggleWrap(w.dataset.wrap); return; }
+  const sl = e.target.closest('[data-slot]');
+  if (sl) { state.focusSlot = sl.dataset.slot === autoSlot() ? null : sl.dataset.slot; render(); return; }
+  if (e.target.closest('[data-backnow]')) { state.focusSlot = null; render(); return; }
+  if (e.target.closest('[data-togglelate]')) { state.showLate = !state.showLate; render(); return; }
+  if (e.target.closest('[data-peek]')) { state.peek = !state.peek; render(); return; }
+  if (e.target.closest('[data-mode]')) { state.mode = state.mode === 'focus' ? 'all' : 'focus'; render(); return; }
+  if (e.target.closest('[data-back]')) { state.view = 'board'; render(); return; }
+
+  const dh = e.target.closest('[data-delhol]');
+  if (dh) { state.holidays = { dates: holidays().filter(x => x !== dh.dataset.delhol) }; await Store.set('config/holidays', state.holidays); render(); return; }
+  if (e.target.closest('[data-delrow]')) { e.target.closest('.ed').remove(); return; }
+
+  const add = e.target.closest('[data-addrow]');
+  if (add) {
+    const box = document.getElementById('ed' + add.dataset.addrow);
+    const div = document.createElement('div');
+    div.className = 'ed';
+    div.innerHTML = '<select data-f="slot">' + SLOTS.map(s => '<option value="' + s.key + '">' + s.label + '</option>').join('') + '</select>'
+      + '<input type="text" data-f="text" placeholder="할 일"><input type="text" data-f="note" placeholder="설명 (선택)">'
+      + '<button class="del" data-delrow="1">✕</button>';
+    box.appendChild(div); div.querySelector('[data-f=text]').focus(); return;
+  }
+
+  const sv = e.target.closest('[data-savetasks]');
+  if (sv) {
+    const role = sv.dataset.savetasks, prefix = role.toLowerCase();
+    const list = [...document.querySelectorAll('#ed' + role + ' .ed')].map((el, i) => {
+      const o = { id: prefix + (i + 1), slot: el.querySelector('[data-f=slot]').value, text: el.querySelector('[data-f=text]').value.trim() };
+      const n = el.querySelector('[data-f=note]').value.trim(); if (n) o.note = n;
+      return o;
+    }).filter(o => o.text);
+    const next = { ...tasksOf(), [role]: list, v: 1 };
+    state.tasks = next; await Store.set('config/tasks', next);
+    sv.textContent = '저장됨 ✓'; setTimeout(() => { sv.textContent = '저장'; }, 1600); return;
+  }
+  const rs = e.target.closest('[data-resettasks]');
+  if (rs) {
+    const role = rs.dataset.resettasks;
+    if (!confirm('당번 ' + role + ' 항목을 처음 상태로 되돌릴까요?')) return;
+    const next = { ...tasksOf(), [role]: DEFAULT_TASKS[role].map(x => ({ ...x })), v: 1 };
+    state.tasks = next; await Store.set('config/tasks', next); render(); return;
+  }
+
+  if (e.target.id === 'savePin') {
+    const v = document.getElementById('pinBox').value.trim();
+    state.teacher = { pin: v };
+    await Store.set('config/teacher', state.teacher);
+    try { if (v) localStorage.setItem('duty66:unlock', v); else localStorage.removeItem('duty66:unlock'); } catch (err) {}
+    e.target.textContent = '저장됨 ✓'; setTimeout(() => { e.target.textContent = '저장'; }, 1600);
+    return;
+  }
+  if (e.target.id === 'fbSave') {
+    const raw = document.getElementById('fbBox').value;
+    try {
+      const cfg = parseCfg(raw);
+      localStorage.setItem('duty66:fbcfg', JSON.stringify(cfg));
+      location.reload();
+    } catch (err) {
+      Store.note = '설정을 읽지 못했습니다 — ' + ((err && err.message) || err);
+      render();
+    }
+    return;
+  }
+  if (e.target.id === 'fbClear') {
+    try { localStorage.removeItem('duty66:fbcfg'); } catch (err) {}
+    location.reload(); return;
+  }
+  if (e.target.id === 'saveNames') {
+    const count = Math.max(2, Math.min(40, parseInt(document.getElementById('sCount').value, 10) || 22));
+    const lines = document.getElementById('sNames').value.split('\n'), names = {};
+    for (let i = 0; i < count; i++) {
+      const v = (lines[i] || '').replace(/^\s*\d+\s*[번.\-)]?\s*/, '').trim();
+      if (v) names[String(i + 1)] = v;
+    }
+    state.roster = { count, names, updatedAt: new Date().toISOString() };
+    await Store.set('config/roster', state.roster);
+    const rot = cloneRot(state.rotation);
+    if (rot.order.length !== count) { rot.order = Array.from({ length: count }, (_, i) => i + 1); rot.cursor = rot.cursor % count; state.rotation = rot; await Store.set('config/rotation', rot); }
+    render(); return;
+  }
+  if (e.target.id === 'saveCursor') {
+    const rot = cloneRot(state.rotation);
+    rot.cursor = parseInt(document.getElementById('sCursor').value, 10) || 0;
+    state.rotation = rot; await Store.set('config/rotation', rot); render(); return;
+  }
+  if (e.target.id === 'clearQ') {
+    const rot = cloneRot(state.rotation); rot.requeue = [];
+    state.rotation = rot; await Store.set('config/rotation', rot); render(); return;
+  }
+  if (e.target.id === 'addHol') {
+    const v = document.getElementById('sHol').value; if (!v) return;
+    state.holidays = { dates: [...new Set([...holidays(), v])] };
+    await Store.set('config/holidays', state.holidays); render(); return;
+  }
+  if (e.target.id === 'saveSlots') {
+    const out = {};
+    document.querySelectorAll('[data-slotfrom]').forEach(el => { out[el.dataset.slotfrom] = { from: el.value }; });
+    document.querySelectorAll('[data-slotto]').forEach(el => { out[el.dataset.slotto] = { ...(out[el.dataset.slotto] || {}), to: el.value }; });
+    state.slotTimes = out; await Store.set('config/slots', out);
+    e.target.textContent = '저장됨 ✓'; setTimeout(() => { e.target.textContent = '시간대 저장'; }, 1600); return;
+  }
+  if (e.target.id === 'reroll') {
+    if (!confirm('오늘 당번을 다시 배정할까요? 오늘 체크한 기록도 지워집니다.')) return;
+    const rot = cloneRot(state.rotation), [a, b] = pickPair(rot);
+    const day = { date: state.today, a, b, checks: {}, absent: [], swaps: [], wrap: {}, createdAt: new Date().toISOString() };
+    state.day = day; state.rotation = rot;
+    await Store.set('days/' + state.today, day); await Store.set('config/rotation', rot);
+    state.view = 'board'; render(); return;
+  }
+});
+
+try { if (localStorage.getItem('duty66:tv') === '1') document.body.classList.add('tv'); } catch (e) {}
+paintTop();
+boot();
+</script>
+
+</body>
+</html>
