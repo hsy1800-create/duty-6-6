@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#EBEFF4">
+<meta name="theme-color" content="#63CCC6">
 <style>
-  :root{color-scheme:light dark; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
+  :root{color-scheme:light; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px)}
   body{margin:0}
   img{max-width:100%}
   [hidden]{display:none!important}
@@ -13,48 +13,31 @@
 <title>6-6 데일리 크루</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
+/* 한낮의 풀밭 한 장면으로만 그립니다 (교실 TV용 · 라이트 고정) */
 :root{
-  --ground:#EBEFF4;
+  color-scheme:light;
+  --sky:#6FD3CD;
+  --sky-top:#63CCC6;
+  --ground:#6FD3CD;
   --surface:#FFFFFF;
-  --surface2:#F4F7FA;
-  --line:#D5DDE6;
-  --line2:#E7EDF3;
-  --ink:#141B23;
-  --ink2:#5B6978;
-  --ink3:#8A98A6;
-  --a:#1A5FA6;      --a-soft:#E3EEF9;  --a-line:#B9D4EC;
-  --b:#0B7355;      --b-soft:#DCF0E9;  --b-line:#A9D9C8;
-  --c:#9A5414;      --c-soft:#F7E9D8;  --c-line:#E7C79E;
-  --done:#13773A;   --done-soft:#E1F3E6; --done-line:#A9DCB9;
-  --late:#B8321C;   --late-soft:#FBE4DF; --late-line:#EFB3A6;
-  --now:#0F4C81;
-  --shadow:0 1px 2px rgba(20,27,35,.06), 0 10px 24px -14px rgba(20,27,35,.2);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ground:#0D1218; --surface:#171E26; --surface2:#1D252E; --line:#2B3742; --line2:#232C36;
-    --ink:#E7EDF3; --ink2:#96A5B4; --ink3:#71818F;
-    --a:#7AB8EE;   --a-soft:#15293B;  --a-line:#2A4A69;
-    --b:#45CBA3;   --b-soft:#0F2E28;  --b-line:#1F5245;
-    --c:#E3A868;   --c-soft:#312310;  --c-line:#56401F;
-    --done:#4FD07C; --done-soft:#12301D; --done-line:#215437;
-    --late:#FF806A; --late-soft:#3A1B16; --late-line:#6B3025;
-    --now:#8CC4F0;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.8);
-  }
-}
-:root[data-theme="dark"]{
-  --ground:#0D1218; --surface:#171E26; --surface2:#1D252E; --line:#2B3742; --line2:#232C36;
-  --ink:#E7EDF3; --ink2:#96A5B4; --ink3:#71818F;
-  --a:#7AB8EE;   --a-soft:#15293B;  --a-line:#2A4A69;
-  --b:#45CBA3;   --b-soft:#0F2E28;  --b-line:#1F5245;
-  --c:#E3A868;   --c-soft:#312310;  --c-line:#56401F;
-  --done:#4FD07C; --done-soft:#12301D; --done-line:#215437;
-  --late:#FF806A; --late-soft:#3A1B16; --late-line:#6B3025;
-  --now:#8CC4F0;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 12px 28px -16px rgba(0,0,0,.8);
+  --surface2:#F2FAF8;
+  --line:#D3ECE7;
+  --line2:#E6F4F1;
+  --ink:#1D3B37;
+  --ink2:#557370;
+  --ink3:#8BA6A2;
+  --sky-ink:#0E4D48;
+  --a:#2F7CC0;      --a-soft:#E2EEFA;  --a-line:#BAD6EF;
+  --b:#4A983A;      --b-soft:#E4F3DB;  --b-line:#BEDFAE;
+  --c:#C47D26;      --c-soft:#FBECD4;  --c-line:#EECF9C;
+  --done:#1C9E88;   --done-soft:#DCF5EF; --done-line:#A3DFD2;
+  --late:#DE4636;   --late-soft:#FDE6E2; --late-line:#F3B3A9;
+  --sun:#F6CF4A;    --sun-soft:#FFF4C6; --sun-ink:#735200;
+  --now:#157A74;
+  --leaf:#6BAE45;
+  --shadow:0 4px 0 rgba(18,92,82,.10), 0 18px 30px -20px rgba(18,92,82,.55);
 }
 
 *{box-sizing:border-box}
@@ -68,7 +51,7 @@ h1,h2,h3{margin:0; font-weight:400; text-wrap:balance}
 button{font:inherit; color:inherit; cursor:pointer; font-family:inherit}
 :focus-visible{outline:3px solid var(--now); outline-offset:2px; border-radius:6px}
 .mono{font-family:'IBM Plex Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums}
-.dh{font-family:'Do Hyeon','IBM Plex Sans KR',sans-serif; font-weight:400}
+.dh{font-family:'Jua','IBM Plex Sans KR',sans-serif; font-weight:400}
 .spacer{flex:1 1 20px}
 
 .wrap{max-width:1360px; margin:0 auto; padding:0 16px; padding-block:12px 26px}
@@ -80,6 +63,7 @@ button{font:inherit; color:inherit; cursor:pointer; font-family:inherit}
 .topdate .d,.topdate .wd,.topdate .cl{white-space:nowrap}
 .topdate .d{font-size:clamp(19px,2.1vw,26px)}
 @media (max-width:520px){.topdate .wd{display:none} .wideonly{display:none}}
+@media (max-width:430px){.topdate .cl{display:none}}
 .topdate .wd{font-size:clamp(13px,1.3vw,16px); color:var(--ink2)}
 .topdate .cl{font-size:clamp(17px,1.9vw,24px); color:var(--ink2); margin-left:4px}
 
@@ -123,7 +107,7 @@ button{font:inherit; color:inherit; cursor:pointer; font-family:inherit}
 .hside.A{border-top:5px solid var(--a)}
 .hside.B{border-top:5px solid var(--b)}
 .tagsq{
-  font-family:'Do Hyeon',sans-serif; font-size:18px; width:34px; height:34px; flex:none;
+  font-family:'Jua',sans-serif; font-size:18px; width:34px; height:34px; flex:none;
   border-radius:9px; display:grid; place-items:center; align-self:center;
 }
 .tagsq.A{background:var(--a); color:#fff}
@@ -221,7 +205,7 @@ button{font:inherit; color:inherit; cursor:pointer; font-family:inherit}
   display:flex; flex-direction:column; gap:2px; align-items:center; min-height:62px; justify-content:center;
 }
 .nobtn:hover{border-color:var(--now); background:var(--surface)}
-.nobtn .n{font-family:'Do Hyeon',sans-serif; font-size:21px}
+.nobtn .n{font-family:'Jua',sans-serif; font-size:21px}
 .nobtn .nm{font-size:12.5px; color:var(--ink2); font-weight:500}
 .roombtn{
   width:100%; border:1.5px solid var(--a-line); background:var(--a-soft); color:var(--a);
@@ -341,10 +325,122 @@ body.tv .frow{min-height:84px}
 body.tv .ftext .t{font-size:clamp(20px,2.3vw,28px)}
 body.tv .ring{width:44px; height:44px}
 body.tv .tpill .lb{font-size:15px}
+
+/* ══ 풀밭 테마 ═══════════════════════════════════════ */
+body{background:linear-gradient(180deg, var(--sky-top) 0%, var(--sky) 55%, #7ADBD4 100%); background-attachment:fixed}
+.scene{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.scene svg{position:absolute; left:0; width:100%; display:block}
+.scene .bushes{bottom:0; height:clamp(150px,24vh,260px)}
+.scene .cloud{position:absolute; width:clamp(120px,14vw,220px); opacity:.95}
+.scene .cloud.c1{top:9vh; left:-20vw; animation:drift 140s linear infinite}
+.scene .cloud.c2{top:24vh; left:-30vw; width:clamp(90px,10vw,160px); opacity:.8; animation:drift 190s linear infinite; animation-delay:-80s}
+.scene .cloud.c3{top:4vh; left:-25vw; width:clamp(70px,8vw,120px); opacity:.7; animation:drift 230s linear infinite; animation-delay:-150s}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(150vw)}}
+@media (prefers-reduced-motion:reduce){.scene .cloud{animation:none; left:auto}.scene .cloud.c1{right:12vw}.scene .cloud.c2{right:55vw}.scene .cloud.c3{right:30vw}}
+.wrap{position:relative; z-index:1; padding-block:14px clamp(120px,18vh,200px)}
+
+/* 하늘 위 글씨 */
+.topdate .d{color:var(--sky-ink); font-size:clamp(22px,2.5vw,32px)}
+.topdate .wd,.topdate .cl{color:var(--sky-ink); opacity:.8}
+.chip{border-color:transparent; box-shadow:0 2px 0 rgba(18,92,82,.10)}
+.menubtn{border-color:transparent; border-radius:14px; box-shadow:0 2px 0 rgba(18,92,82,.10); color:var(--ink2)}
+.mebtn{border-color:transparent; box-shadow:0 2px 0 rgba(18,92,82,.10)}
+.sheet{border-radius:18px; border-color:var(--line)}
+
+/* 스티커처럼 둥근 카드 */
+.hero,.focus,.card,.mecard,.picker,.panel,.notice{border:0; border-radius:26px; box-shadow:var(--shadow)}
+.hero{position:relative; overflow:visible}
+.hero .sep{background:var(--line2); margin-block:16px}
+.hside{padding:16px 22px 18px; border-top:0 !important; position:relative}
+.hside.A{border-radius:26px 0 0 26px}
+.hside.B{border-radius:0 26px 26px 0}
+@media (max-width:680px){.hside.A{border-radius:26px 26px 0 0}.hside.B{border-radius:0 0 26px 26px}.hero .sep{margin:0 16px}}
+.hside::before{content:""; position:absolute; left:22px; width:72px; top:0; height:7px; border-radius:0 0 7px 7px}
+.hside.A::before{background:var(--a)} .hside.B::before{background:var(--b)}
+.tagsq{border-radius:12px; box-shadow:inset 0 -3px 0 rgba(0,0,0,.14)}
+.hnum{font-family:'Jua',sans-serif}
+.leafdeco{position:absolute; width:46px; height:46px; pointer-events:none}
+.hero .leafdeco{top:-18px; right:26px; transform:rotate(18deg)}
+.focus{position:relative; overflow:visible}
+.focus .leafdeco{top:-16px; left:22px; width:40px; height:40px; transform:rotate(-24deg)}
+.focus > :first-child{border-radius:26px 26px 0 0}
+.focus > :last-child{border-radius:0 0 26px 26px}
+
+/* 지금 = 햇살 */
+.fhead{background:var(--sun-soft); border-bottom:2px dashed var(--sun); padding:16px 22px 14px}
+.fhead .ttl{color:var(--sun-ink)}
+.livedot{background:var(--late); width:12px; height:12px; box-shadow:0 0 0 4px rgba(222,70,54,.18)}
+.backnow{border-color:var(--sun); color:var(--sun-ink); border-radius:12px}
+.focus.notnow .fhead{background:var(--surface2); border-bottom:2px dashed var(--line)}
+
+/* 할 일 줄 */
+.frow{padding:14px 22px; border-top:1px solid var(--line2); transition:background .2s}
+.frow:hover{background:#F6FCFB}
+.frow.done{background:var(--done-soft)}
+.ring{border:3px solid #CFE6E1; transition:transform .18s ease, background .15s, border-color .15s}
+.frow.done .ring{background:var(--done); border-color:var(--done); transform:scale(1.06)}
+.frow:active .ring{transform:scale(.9)}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1.06)}}
+.frow.done .ring svg{animation:pop .28s ease-out}
+@media (prefers-reduced-motion:reduce){.frow.done .ring svg{animation:none}}
+
+/* 밀린 일 */
+.lateblk{border:0; border-radius:20px; box-shadow:var(--shadow)}
+
+/* 하루 흐름 */
+.timeline{padding:6px 2px 10px}
+.tpill{border:0; border-radius:18px; box-shadow:0 3px 0 rgba(18,92,82,.10); padding:10px 16px}
+.tpill.sel{box-shadow:0 0 0 3px var(--now), 0 3px 0 rgba(18,92,82,.10)}
+.tpill.cur{background:var(--sun-soft)}
+.tpill.cur .lb{color:var(--sun-ink)}
+.tpill.full{background:var(--done-soft)}
+.tpill.miss{background:var(--late-soft)}
+
+/* 아래 줄은 풀밭 위에 떠 있는 알약 */
+.footbar{background:rgba(255,255,255,.93); border-radius:22px; padding:9px 16px 9px 9px; box-shadow:0 3px 0 rgba(18,92,82,.10)}
+.ghost{border:0; background:var(--surface2); border-radius:999px}
+.rail{background:#E3F1EE}
+.rail>i{background:linear-gradient(90deg, var(--done), #57C4A9)}
+
+/* 학생 화면 · 번호 고르기 */
+.mecard{border-top:0}
+.mecard.A{box-shadow:inset 0 6px 0 var(--a), var(--shadow)}
+.mecard.B{box-shadow:inset 0 6px 0 var(--b), var(--shadow)}
+.metitle,.mewhen .big{font-family:'Jua',sans-serif}
+.nobtn{border:0; border-radius:18px; background:var(--surface2); box-shadow:0 3px 0 rgba(18,92,82,.10)}
+.nobtn:hover{background:var(--sun-soft)}
+.roombtn{border:0; border-radius:18px; background:var(--sun-soft); color:var(--sun-ink); box-shadow:0 3px 0 rgba(18,92,82,.10)}
+
+/* 전체 보기 카드 */
+.card.A{box-shadow:inset 0 6px 0 var(--a), var(--shadow)}
+.card.B{box-shadow:inset 0 6px 0 var(--b), var(--shadow)}
+.card.C{box-shadow:inset 0 6px 0 var(--c), var(--shadow)}
+.card.A,.card.B,.card.C{border-top:0}
+.box{border-radius:9px}
+.trow.done .box{background:var(--done); border-color:var(--done)}
+
+.btn{border-radius:12px}
+.btn.pri{background:var(--now); border-color:var(--now)}
+.notice{border-left:0; box-shadow:inset 6px 0 0 var(--c), var(--shadow)}
+.allclear{display:inline-flex; align-items:center; gap:6px}
+.allclear svg{width:18px; height:18px}
 </style>
 
 </head>
 <body>
+<div class="scene" aria-hidden="true">
+  <svg width="0" height="0" style="position:absolute">
+    <filter id="fuzz" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+  <svg class="cloud c1" viewBox="0 0 220 110"><g filter="url(#fuzz)" fill="#FFFFFF"><circle cx="62" cy="68" r="34"/><circle cx="108" cy="50" r="42"/><circle cx="156" cy="70" r="30"/><rect x="40" y="66" width="140" height="34" rx="17"/></g></svg>
+  <svg class="cloud c2" viewBox="0 0 220 110"><g filter="url(#fuzz)" fill="#FFFFFF"><circle cx="70" cy="66" r="30"/><circle cx="114" cy="54" r="36"/><circle cx="152" cy="70" r="26"/><rect x="48" y="66" width="128" height="30" rx="15"/></g></svg>
+  <svg class="cloud c3" viewBox="0 0 220 110"><g filter="url(#fuzz)" fill="#FFFFFF"><circle cx="80" cy="64" r="28"/><circle cx="124" cy="58" r="32"/><rect x="56" y="64" width="110" height="28" rx="14"/></g></svg>
+  <svg class="bushes" id="bushes" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice"></svg>
+</div>
+
 <div class="wrap">
   <header class="top">
     <div class="topdate">
@@ -973,6 +1069,44 @@ function allCard(role) {
     + (role === 'C' ? '<div class="cbody">' + body + '</div>' : body) + '</section>';
 }
 
+/* ── 풀밭 장면 ───────────────────────── */
+const LEAF = '<svg class="leafdeco" viewBox="0 0 48 48" aria-hidden="true"><path d="M7 41C7 19 21 6 42 6c0 21-13 35-35 35z" fill="#7CC055"/><path d="M9 39C17 29 26 20 38 10" stroke="#4E8F34" stroke-width="2.6" fill="none" stroke-linecap="round"/></svg>';
+const APPLE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.2c-2.2-1.9-7.2-1.3-7.2 4.6C4.8 17.2 8 21 10 21c1 0 1.3-.5 2-.5s1 .5 2 .5c2 0 5.2-3.8 5.2-9.2 0-5.9-5-6.5-7.2-4.6z" fill="#E0463A"/><path d="M12 7c0-2 .9-3.4 2.8-4" stroke="#6B4423" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M13.2 5.2c1.9-1.5 4-1.1 5 0-1.5 1.2-3.5 1.4-5 0z" fill="#6BAE45"/></svg>';
+
+function drawScene() {
+  const svg = document.getElementById('bushes');
+  if (!svg) return;
+  let seed = 17;
+  const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  const W = 1600, H = 260;
+  const f = n => n.toFixed(0);
+  const row = (base, rMin, rMax, color, step, from = -60, to = W + 60) => {
+    let s = '<g filter="url(#fuzz)" fill="' + color + '">';
+    for (let x = from; x < to; x += step * (0.7 + rnd() * 0.6)) {
+      s += '<circle cx="' + f(x) + '" cy="' + f(base + rnd() * 16 - 8) + '" r="' + f(rMin + rnd() * (rMax - rMin)) + '"/>';
+    }
+    return s + '<rect x="' + f(from - 20) + '" y="' + base + '" width="' + f(to - from + 40) + '" height="' + (H - base + 20) + '"/></g>';
+  };
+  let out = '';
+  out += row(96, 46, 74, '#2E6B39', 78);
+  out += row(128, 42, 66, '#4C923F', 70);
+  let dots = '';
+  for (let i = 0; i < 30; i++) {
+    dots += '<circle cx="' + f(rnd() * W) + '" cy="' + f(112 + rnd() * 76) + '" r="' + (3 + rnd() * 3).toFixed(1) + '" fill="' + (rnd() > 0.45 ? '#FFF6D8' : '#F4DF72') + '"/>';
+  }
+  out += '<g>' + dots + '</g>';
+  out += row(196, 30, 50, '#67AB43', 64, -60, 360);
+  out += row(196, 30, 50, '#67AB43', 64, 1240, W + 60);
+  out += '<g filter="url(#fuzz)"><rect x="-80" y="224" width="' + (W + 160) + '" height="60" fill="#8CC356"/></g>';
+  let tufts = '';
+  for (let i = 0; i < 20; i++) {
+    const x = f(rnd() * W), y = f(238 + rnd() * 14);
+    tufts += '<path d="M' + x + ' ' + y + 'l-4-9M' + x + ' ' + y + 'l0-11M' + x + ' ' + y + 'l4-9"/>';
+  }
+  out += '<g stroke="#5E9C3A" stroke-width="3" stroke-linecap="round" fill="none">' + tufts + '</g>';
+  svg.innerHTML = out;
+}
+
 /* ── 번호 고르기 ─────────────────────── */
 function pickView() {
   const c = roster().count || 22;
@@ -1044,7 +1178,7 @@ function boardView() {
       return html;
     }
   } else {
-    html += '<section class="hero">' + heroSide('A') + '<div class="sep"></div>' + heroSide('B') + '</section>';
+    html += '<section class="hero">' + LEAF + heroSide('A') + '<div class="sep"></div>' + heroSide('B') + '</section>';
   }
 
   if (state.mode === 'focus') {
@@ -1061,7 +1195,8 @@ function boardView() {
   html += '<div class="footbar">'
     + '<button class="ghost" data-mode="1">' + (state.mode === 'focus' ? '오늘 할 일 전체 보기' : '지금 할 일만 보기') + '</button>'
     + '<span class="rail"><i style="width:' + (list.length ? clamp(done / list.length * 100) : 0) + '%"></i></span>'
-    + (student ? '' : '<span class="muted">다음 당번 ' + (nd.getMonth() + 1) + '/' + nd.getDate() + '(' + WD[nd.getDay()] + ') · ' + esc(who(na) + ' · ' + who(nb)) + '</span>')
+    + (list.length && done === list.length ? '<span class="chip ok allclear">' + APPLE + '오늘 할 일 모두 끝!</span>' : '')
+    + (student ? '' :'<span class="muted">다음 당번 ' + (nd.getMonth() + 1) + '/' + nd.getDate() + '(' + WD[nd.getDay()] + ') · ' + esc(who(na) + ' · ' + who(nb)) + '</span>')
     + '</div>';
   return html;
 }
@@ -1360,6 +1495,7 @@ document.getElementById('main').addEventListener('click', async e => {
 });
 
 try { if (localStorage.getItem('duty66:tv') === '1') document.body.classList.add('tv'); } catch (e) {}
+drawScene();
 paintTop();
 boot();
 </script>
